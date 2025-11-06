@@ -92,7 +92,7 @@ Let's dive in
 
 11. **How much is each customer worth over their entire relationship with us (Behavioural Analysis)**
 
-    [Customer LTV file]([https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/cltv.csv](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/customer_ltv.html))
+    [Customer LTV file](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/customer_ltv.html)
 
 12. **Average revenue per user increasing with time**
 
@@ -118,5 +118,58 @@ Let's dive in
 
 16. Do top products differ by season (months in years)
 
-[top_product_by_season_in_year](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/top_product_by_season.html)
-    
+[Top product by season (year)](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/top_product_by_season.html)
+
+17. **Which top 10 products are the most profitable**
+
+  ![Top profitable Product](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/Top10MostProfitableProducts.png)
+
+18. **What percentage of total revenue comes from each category and the category to prioritize during promotion**
+
+  ![Sales Share By category](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/SalesByCategory.png)
+
+| Categoryname                  | Revenue     | Pct share |
+| :---------------------------- | :---------- | :-------- |
+| Computers                     | 95455490.99 | 44%    |
+| Cell phones                   | 34072136.45 | 16%     |
+| Home Appliances               | 27894563.74 | 13%    |
+| TV and Video                  | 21371302.77 | 10%    |
+| Cameras and camcorders        | 19511997.82 | 9%     |
+| Music, Movies and Audio Books | 11047053.58 | 5%     |
+| Audio                         | 5572794.14  | 3%     |
+| Games and Toys                | 1749979.68  | 1%     |
+
+
+## Time Analysis
+
+19. **Monthly revenue trend**
+
+  ![monthly sales trend](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/MonthlySalesTrend.png)
+
+20. **Is revenue stable or seasonal**
+
+  ![seasonality](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/SeasonalSale.png)
+
+  > Revenue is Seasonal
+
+21. **Which Month generate the Highest sale**
+
+  ![sales_trend](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/SalesTrend.png)
+
+  | Month name | Sale        |
+| :--------- | :---------- |
+| Jan        | $19,647,340.15 |
+| Feb        | $25,656,119.25 |
+| Mar        | $13401720.10 |
+| Apr        | $7044374.50  |
+| May        | $17047743.92 |
+| Jun        | $18585158.07 |
+| Jul        | $14400505.03 |
+| Aug        | $15925243.69 |
+| Sep        | $16555169.35 |
+| Oct        | $17247648.57 |
+| Nov        | $17239553.01 |
+| Dec        | $20973291.43 |
+
+
+  
