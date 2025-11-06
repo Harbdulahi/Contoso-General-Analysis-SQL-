@@ -1,1 +1,93 @@
-# Contoso-General-Analysis-SQL-
+## Contoso-General-Analysis-SQL
+
+This project is based on Contoso retail analysis, the aim (analysis goals) of which is to understand the overall performance of business operations and the result of the analysis to make or help in decision-making for stakeholders(s) to improve business health.
+
+### Datasets
+
+This datasets or database file is a fictional dataset created by Microsoft, it's about a hardware retail (online) store. The purpose of the dataset's creation is to help learners practice their SQL (PostgreSQL, SQLITE, MYSQL, Power BI, etc) skills and far beyond. It consists of 1 fact (sales) table, 4 dimensions (date, customer, product, and store) table, and 1 other (exchange) table that has no relationship with any of the other tables.
+Let's dive in
+
+[Query File]
+
+### Tools
+- VS Code
+- DBcode (VS Code Extension, it provides a Jupyter notebook-like interface for interactive querying)
+- PostgreSQL
+- Contoso_db file
+
+### Functions Used
+- Aggregation Function (Sum, Count)
+- Scaler Functions (Date_Trunc(), Extract, To_Char, Round, DATE, TEXT, NUMERIC etc)
+- Statistical Functions (Avg, Min, Max)
+- Windows Functions (RANK, DENSE_RANK, NTILE, LAG, Moving Average, CumSum
+
+### Analysis Steps
+- Sales Performance Analysis
+- Customer Analysis
+- Product Analysis
+- Time Analysis
+
+[Query File]
+
+## Sale Performance Analysis
+
+### Analysis And Business Question
+
+1. **How much revenue are we generating overall:**
+
+  > The Total Revenue we have generated is **$203,723,867.07** in total
+
+2. **Is our revenue increasing or decreasing compared to the last period?**
+
+| Order year | Revenue     | Pct change |
+| :--------- | :---------- | :--------- |
+| 2015-01-01 | $7,563,504.71  | 0%      |
+| 2016-01-01 | $10,492,836.62 | 39%      |
+| 2017-01-01 | $13,356,053.79 | 27%      |
+| 2018-01-01 | $24,936,034.34 | 87%      |
+| 2019-01-01 | $31,509,447.70 | 26%     |
+| 2020-01-01 | $11,066,210.09 | -65%     |
+| 2021-01-01 | $21,410,725.38 | 93%      |
+| 2022-01-01 | $43,426,105.74 | 103%    |
+| 2023-01-01 | $31,871,225.18 | -27%    |
+| 2024-01-01 | $8,091,723.52  | -75%    |
+
+3. **How many orders are customers placing**
+
+  > Customer placed a total of 83,130 orders across the years
+
+4. **Is order volume growing with time**
+
+![order_volume_by_year](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/OrderVolumeByyear.png)
+
+  > Order volumes are growing with time, with the peak being **2022** and a decline both in 2020 and 2024
+
+5. **On average how much, how much does each customer spend**
+
+  > On average customer spend **$4,116.71** 
+
+6. **Which period shows the strongest and weakest growth**
+
+  > 2022 shows the strongest growth and 2024, the weakest
+
+7. **How fast are our sales growing yearly**
+
+  > On average our sales was growing at **23%** yearly from the previous year
+
+8. **Which category(s) contribute the most to revenue**
+
+  ![sales_by_cat.](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/SalesByCategory.png)
+
+  > The Computers Category **(44%)** contributes the most to revenue, followed by Cell Phones **(16%)**
+
+ ## Customer Analysis
+ 
+9. **How many unique buyers are buying from us**
+
+  > The Total number of customers buying from us is: **49,487**
+
+10. **Are we expanding our customer base over time**
+
+  > ![customer_acquire_per_year](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/CustomerAcquisition(FirstPurchase)ByYear.png)
+11. 
+
