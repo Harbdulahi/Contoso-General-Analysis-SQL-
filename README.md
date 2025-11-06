@@ -88,6 +88,35 @@ Let's dive in
 
 10. **Are we expanding our customer base over time**
 
-  > ![customer_acquire_per_year](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/CustomerAcquisition(FirstPurchase)ByYear.png)
-11. 
+  ![customer_acquire_per_year](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/CustomerAcquisition(FirstPurchase)ByYear.png)
 
+11. **How much is each customer worth over their entire relationship with us (Behavioural Analysis)**
+
+    [Customer LTV file]([https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/cltv.csv](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/customer_ltv.html))
+
+12. **Average revenue per user increasing with time**
+
+  ![customer_avg_by_year](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/CustomerAVGSpendByYear.png)
+
+13. **What share of customers make more than 1 purchase**
+
+  ![repeat_purchase](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/purchase(repeatvsonce).png)
+
+  > About **44%** of customers purchase repeatedly; our retention efforts are working, but can still be improved upon.
+
+## Product Analysis
+
+14. **Which products are our best sellers (top 10)**
+
+  ![top10_best_sellers](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/Top10ProductBysale.png)
+
+15. **Do top products differ by region**
+
+  ![top_product_by_region](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/TopProductByCountry.png)
+
+> The top **2** products don't really differ by region except in colour variation
+
+16. Do top products differ by season (months in years)
+
+[top_product_by_season_in_year](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/top_product_by_season.html)
+    
