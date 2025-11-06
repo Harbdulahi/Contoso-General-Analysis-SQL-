@@ -1,0 +1,1622 @@
+cells:
+  - kind: 1
+    languageId: markdown
+    value: "# Project Overview\r
+
+      \r
+
+      in this project we will analysis the microsoft contoso dataset for it's
+      sales performance, customer segment\r\n"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "## Sales Performance Analysis"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- How much revenue are generating overall\r
+
+      SELECT\r
+
+      \    SUM(ROUND((netprice * quantity)::NUMERIC, 2)) AS \"revenue\"\r
+
+      FROM\r
+
+      \    sales"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Is our revenue increasing or decreasing compare to last period\r
+
+      WITH\r
+
+      \    order_year_cte AS (\r
+
+      \        SELECT\r
+
+      \            DATE_TRUNC('year', orderdate)::DATE AS order_year,\r
+
+      \            SUM(ROUND((netprice * quantity)::NUMERIC, 2)) AS revenue\r
+
+      \        FROM\r
+
+      \            sales\r
+
+      \        GROUP BY\r
+
+      \            order_year\r
+
+      \        ORDER BY\r
+
+      \            order_year ASC\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    *,\r
+
+      \    ROUND(\r
+
+      \        ((revenue - previous_revenue) / previous_revenue)::NUMERIC,\r
+
+      \        2\r
+
+      \    ) * 100 AS pct_change\r
+
+      FROM\r
+
+      \    (\r
+
+      \        SELECT\r
+
+      \            order_year,\r
+
+      \            revenue,\r
+
+      \            LAG(revenue) OVER (\r
+
+      \                ORDER BY\r
+
+      \                    order_year\r
+
+      \            ) AS previous_revenue\r
+
+      \        FROM\r
+
+      \            order_year_cte\r
+
+      \    )"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- How many orders are customers placing\r
+
+      SELECT\r
+
+      \    COUNT(DISTINCT orderkey) AS order_count\r
+
+      FROM\r
+
+      \    sales"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Are order volume growing with time\r
+
+      SELECT\r
+
+      \    EXTRACT(\r
+
+      \        YEAR\r
+
+      \        FROM\r
+
+      \            orderdate\r
+
+      \    )::TEXT AS _year,\r
+
+      \    COUNT(DISTINCT orderkey) AS unique_orders\r
+
+      FROM\r
+
+      \    sales\r
+
+      GROUP BY\r
+
+      \    _year"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- On average how much, how much does each customer spend \r
+
+      SELECT\r
+
+      \    ROUND(\r
+
+      \        (\r
+
+      \            SUM(quantity * netprice) / COUNT(DISTINCT customerkey)\r
+
+      \        )::NUMERIC,\r
+
+      \        2\r
+
+      \    ) AS customer_avg\r
+
+      FROM\r
+
+      \    sales"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Which period shows the strongest and weakest growth\r
+
+      \r
+
+      WITH\r
+
+      \    order_year_cte AS (\r
+
+      \        SELECT\r
+
+      \            DATE_TRUNC('year', orderdate)::DATE AS order_year,\r
+
+      \            SUM(ROUND((netprice * quantity)::NUMERIC, 2)) AS revenue\r
+
+      \        FROM\r
+
+      \            sales\r
+
+      \        GROUP BY\r
+
+      \            order_year\r
+
+      \        ORDER BY\r
+
+      \            order_year ASC\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    order_year,\r
+
+      \    ROUND(\r
+
+      \        ((revenue - previous_revenue) / previous_revenue)::NUMERIC,\r
+
+      \        2\r
+
+      \    ) * 100 AS pct_change\r
+
+      FROM\r
+
+      \    (\r
+
+      \        SELECT\r
+
+      \            order_year,\r
+
+      \            revenue,\r
+
+      \            LAG(revenue) OVER (\r
+
+      \                ORDER BY\r
+
+      \                    order_year\r
+
+      \            ) AS previous_revenue\r
+
+      \        FROM\r
+
+      \            order_year_cte\r
+
+      \    )"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- How fast are our sales growing yearly\r
+
+      \r
+
+      WITH\r
+
+      \    order_year_cte AS (\r
+
+      \        SELECT\r
+
+      \            EXTRACT(\r
+
+      \                YEAR\r
+
+      \                FROM\r
+
+      \                    orderdate\r
+
+      \            ) AS order_year,\r
+
+      \            SUM(ROUND((netprice * quantity)::NUMERIC, 2)) AS revenue\r
+
+      \        FROM\r
+
+      \            sales\r
+
+      \        GROUP BY\r
+
+      \            order_year\r
+
+      \        ORDER BY\r
+
+      \            order_year ASC\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    ROUND(AVG(\r
+
+      \        ((revenue - previous_revenue) / previous_revenue))::NUMERIC,\r
+
+      \        2\r
+
+      \    ) * 100 || '%' AS AVG_pct_change\r
+
+      FROM\r
+
+      \    (\r
+
+      \        SELECT\r
+
+      \            order_year,\r
+
+      \            revenue,\r
+
+      \            LAG(revenue) OVER (\r
+
+      \                ORDER BY\r
+
+      \                    order_year\r
+
+      \            ) AS previous_revenue\r
+
+      \        FROM\r
+
+      \            order_year_cte\r
+
+      \    )"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Which category(s) contribute the most to revenue\r
+
+      WITH\r
+
+      \    category_sale AS (\r
+
+      \        SELECT\r
+
+      \            p.categoryname AS category,\r
+
+      \            SUM(ROUND((quantity * netprice)::NUMERIC, 2)) AS total_sale\r
+
+      \        FROM\r
+
+      \            sales s\r
+
+      \            LEFT JOIN product p on s.productkey = p.productkey\r
+
+      \        GROUP BY\r
+
+      \            category\r
+
+      \        ORDER BY\r
+
+      \            total_sale DESC\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    *,\r
+
+      \    ROUND(\r
+
+      \        (\r
+
+      \            total_sale / (\r
+
+      \                SELECT\r
+
+      \                    SUM(total_sale)\r
+
+      \                FROM\r
+
+      \                    category_sale\r
+
+      \            )\r
+
+      \        )::NUMERIC,\r
+
+      \        2\r
+
+      \    ) * 100 AS pct_share\r
+
+      FROM\r
+
+      \    category_sale"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "## Customer Analysis"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- How many unique are buying from us\r
+
+      SELECT\r
+
+      \    COUNT(DISTINCT customerkey) AS customer_count\r
+
+      FROM\r
+
+      \    sales"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- are we expanding our customer base over time\r
+
+      \r
+
+      WITH\r
+
+      \    first_purchase AS (\r
+
+      \        SELECT\r
+
+      \            customerkey,\r
+
+      \            MIN(orderdate) AS first_purchase_year\r
+
+      \        FROM\r
+
+      \            sales\r
+
+      \        GROUP BY\r
+
+      \            customerkey\r
+
+      \        ORDER BY\r
+
+      \            first_purchase_year\r
+
+      \    )\r
+
+      \r
+
+      SELECT\r
+
+      \    \"year\",\r
+
+      \    COUNT(customerkey) AS customer_first_purchase\r
+
+      FROM\r
+
+      \    (\r
+
+      \        SELECT\r
+
+      \            customerkey,\r
+
+      \            DATE_TRUNC('year', first_purchase_year)::DATE AS \"year\"\r
+
+      \        FROM\r
+
+      \            first_purchase\r
+
+      \    )\r
+
+      GROUP BY\r
+
+      \    \"year\"\r
+
+      ORDER BY\r
+
+      \    year ASC"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- How much is each customer worth over their entire relationship with
+      us\r
+
+      -- Customer LTV using behavioural segmentation\r
+
+      WITH\r
+
+      \    cltv_ AS (\r
+
+      \        SELECT\r
+
+      \            customerkey,\r
+
+      \            COUNT(DISTINCT orderkey) AS order_count,\r
+
+      \            SUM(quantity * netprice) / COUNT(DISTINCT orderkey) AS aov,\r
+
+      \            (MAX(orderdate) - MIN(orderdate)) / 30 AS age_month\r
+
+      \        FROM\r
+
+      \            sales\r
+
+      \        GROUP BY\r
+
+      \            customerkey\r
+
+      \        HAVING\r
+
+      \            (MAX(orderdate) - MIN(orderdate)) / 30 > 0\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    *,\r
+
+      \    ROUND((order_count::NUMERIC / age_month::NUMERIC), 5) AS
+      purchase_freq_month,\r
+
+      \    ROUND((order_count * aov * (order_count::NUMERIC /
+      age_month))::NUMERIC) AS LTV\r
+
+      FROM\r
+
+      \    cltv_"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Average revenue per user increasing with time\r
+
+      -- How much does each customer spend on average\r
+
+      SELECT\r
+
+      \    EXTRACT(\r
+
+      \        YEAR\r
+
+      \        FROM\r
+
+      \            orderdate\r
+
+      \    )::TEXT AS order_year,\r
+
+      \    SUM(quantity * netprice) / COUNT(DISTINCT customerkey) AS arpu\r
+
+      FROM\r
+
+      \    sales\r
+
+      GROUP BY\r
+
+      \    order_year"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- What share of customers makes more than 1 purchase\r
+
+      WITH\r
+
+      \    customer_order AS (\r
+
+      \        SELECT\r
+
+      \            customerkey,\r
+
+      \            COUNT(DISTINCT orderkey) as unique_order_count\r
+
+      \        FROM\r
+
+      \            sales\r
+
+      \        GROUP BY\r
+
+      \            customerkey\r
+
+      \    ),\r
+
+      \    repeat_purchase_type AS (\r
+
+      \        SELECT\r
+
+      \            customerkey,\r
+
+      \            unique_order_count,\r
+
+      \            CASE\r
+
+      \                WHEN unique_order_count > 1 THEN 'repeat'\r
+
+      \                ELSE 'once'\r
+
+      \            END AS order_count_type\r
+
+      \        FROM\r
+
+      \            customer_order\r
+
+      \    ),\r
+
+      \    once_vs_repeat_count AS (\r
+
+      \        SELECT\r
+
+      \            order_count_type,\r
+
+      \            COUNT(order_count_type) AS count\r
+
+      \        FROM\r
+
+      \            repeat_purchase_type\r
+
+      \        GROUP BY\r
+
+      \            order_count_type\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    *,\r
+
+      \    ROUND(\r
+
+      \        (\r
+
+      \            count / (\r
+
+      \                SELECT\r
+
+      \                    SUM(count)\r
+
+      \                FROM\r
+
+      \                    once_vs_repeat_count\r
+
+      \            )\r
+
+      \        )::NUMERIC,\r
+
+      \        2\r
+
+      \    )*100 AS pct_share\r
+
+      FROM\r
+
+      \    once_vs_repeat_count"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "### PRODUCT ANALYSIS"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Which product are our best seller (top 10)\r
+
+      SELECT\r
+
+      \    p.productname,\r
+
+      \    SUM(ROUND((s.quantity * s.netprice)::NUMERIC, 2)) AS revenue\r
+
+      FROM\r
+
+      \    sales s\r
+
+      \    LEFT JOIN product p ON s.productkey = p.productkey\r
+
+      GROUP BY\r
+
+      \    p.productname\r
+
+      ORDER BY\r
+
+      \    revenue DESC\r
+
+      LIMIT\r
+
+      \    10"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Do top product differ by region\r
+
+      WITH\r
+
+      \    products_sales AS (\r
+
+      \        SELECT\r
+
+      \            c.country,\r
+
+      \            p.productname,\r
+
+      \            SUM(ROUND((s.quantity * s.netprice)::NUMERIC, 2)) AS
+      revenue\r
+
+      \        FROM\r
+
+      \            sales s\r
+
+      \            LEFT JOIN product p ON s.productkey = p.productkey\r
+
+      \            LEFT JOIN customer c ON s.customerkey = c.customerkey\r
+
+      \        GROUP BY\r
+
+      \            c.country,\r
+
+      \            p.productname\r
+
+      \        ORDER BY\r
+
+      \            revenue DESC,\r
+
+      \            c.country ASC\r
+
+      \    ),\r
+
+      \    top_product_rank AS (\r
+
+      \        SELECT\r
+
+      \            *,\r
+
+      \            RANK() OVER (\r
+
+      \                PARTITION BY\r
+
+      \                    country\r
+
+      \                ORDER BY\r
+
+      \                    revenue DESC\r
+
+      \            ) AS rank\r
+
+      \        FROM\r
+
+      \            products_sales\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    *\r
+
+      FROM\r
+
+      \    top_product_rank\r
+
+      WHERE\r
+
+      \    rank = 1\r
+
+      ORDER BY\r
+
+      \    productname ASC"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Do top product differ by season (months in years)\r
+
+      WITH\r
+
+      \    seasonal_sale AS (\r
+
+      \        SELECT\r
+
+      \            EXTRACT(\r
+
+      \                YEAR\r
+
+      \                FROM\r
+
+      \                    orderdate\r
+
+      \            ) AS \"year\",\r
+
+      \            TO_CHAR(orderdate, 'Month') AS \"month_name\",\r
+
+      \            EXTRACT(\r
+
+      \                MONTH\r
+
+      \                FROM\r
+
+      \                    orderdate\r
+
+      \            ) AS \"month_no\",\r
+
+      \            p.productname,\r
+
+      \            SUM(ROUND((s.quantity * s.netprice)::NUMERIC, 2)) AS
+      revenue\r
+
+      \        FROM\r
+
+      \            sales s\r
+
+      \            LEFT JOIN product p ON s.productkey = p.productkey\r
+
+      \        GROUP BY\r
+
+      \            \"year\",\r
+
+      \            \"month_name\",\r
+
+      \            \"month_no\",\r
+
+      \            p.productname\r
+
+      \        ORDER BY\r
+
+      \            \"year\",\r
+
+      \            \"month_no\" ASC,\r
+
+      \            revenue DESC\r
+
+      \    ),\r
+
+      \    product_rank_by_season AS (\r
+
+      \        SELECT\r
+
+      \            \"year\",\r
+
+      \            \"month_name\",\r
+
+      \            productname,\r
+
+      \            revenue,\r
+
+      \            RANK() OVER (\r
+
+      \                PARTITION BY\r
+
+      \                    \"year\",\r
+
+      \                    \"month_name\"\r
+
+      \                ORDER BY\r
+
+      \                    revenue DESC\r
+
+      \            ) AS rank\r
+
+      \        FROM\r
+
+      \            seasonal_sale\r
+
+      \        ORDER BY\r
+
+      \            \"year\",\r
+
+      \            \"month_no\"\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    *\r
+
+      FROM\r
+
+      \    product_rank_by_season\r
+
+      WHERE\r
+
+      \    rank = 1"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Which top 10 products are the most profitable\r
+
+      SELECT\r
+
+      \    p.productname,\r
+
+      \    SUM(ROUND((s.unitcost * s.quantity)::NUMERIC, 2)) AS \"profit\"\r
+
+      FROM\r
+
+      \    sales s\r
+
+      \    LEFT JOIN product p ON s.productkey = p.productkey\r
+
+      GROUP BY\r
+
+      \    p.productname\r
+
+      ORDER BY\r
+
+      \    \"profit\" DESC\r
+
+      LIMIT 10"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- What percentage of total revenue comes from each category and the
+      category to prioritize during promotion\r
+
+      \r
+
+      WITH\r
+
+      \    revenue_by_category AS (\r
+
+      \        SELECT\r
+
+      \            p.categoryname,\r
+
+      \            SUM(ROUND((s.quantity * s.unitprice)::NUMERIC, 2)) AS
+      \"revenue\"\r
+
+      \        FROM\r
+
+      \            sales s\r
+
+      \            LEFT JOIN product p ON s.productkey = p.productkey\r
+
+      \        GROUP BY\r
+
+      \            p.categoryname\r
+
+      \        ORDER BY\r
+
+      \            \"revenue\" DESC\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    *,\r
+
+      \    ROUND(\r
+
+      \        (\r
+
+      \            \"revenue\" / (\r
+
+      \                SELECT\r
+
+      \                    SUM(\"revenue\")\r
+
+      \                FROM\r
+
+      \                    revenue_by_category\r
+
+      \            )\r
+
+      \        )::NUMERIC,\r
+
+      \        2\r
+
+      \    ) * 100 AS pct_share\r
+
+      FROM\r
+
+      \    revenue_by_category"
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "## Time Analysis"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- monthly revenue trend\r
+
+      SELECT\r
+
+      \    TO_CHAR(orderdate, 'YYYY-mm') AS \"month\",\r
+
+      \    SUM(ROUND((quantity * netprice)::NUMERIC, 2)) AS \"revenue\"\r
+
+      FROM\r
+
+      \    sales\r
+
+      GROUP BY\r
+
+      \    \"month\"\r
+
+      ORDER BY\r
+
+      \    \"month\""
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Is revenue stable or seasonal\r
+
+      -- Which month should we ramp inventory/marketing\r
+
+      \r
+
+      WITH\r
+
+      \    revenue_by_month AS (\r
+
+      \        SELECT\r
+
+      \            TO_CHAR(orderdate, 'Month') AS \"month_name\",\r
+
+      \            EXTRACT(\r
+
+      \                MONTH\r
+
+      \                FROM\r
+
+      \                    orderdate\r
+
+      \            ) AS \"month_no\",\r
+
+      \            EXTRACT(\r
+
+      \                YEAR\r
+
+      \                FROM\r
+
+      \                    orderdate\r
+
+      \            ) AS \"year\",\r
+
+      \            ROUND((quantity * netprice)::NUMERIC, 2) AS \"sale\"\r
+
+      \        FROM\r
+
+      \            sales\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    \"month_no\",\r
+
+      \    \"month_name\",\r
+
+      \    SUM(\r
+
+      \        CASE\r
+
+      \            WHEN \"year\" = 2015 THEN \"sale\"\r
+
+      \        END\r
+
+      \    ) AS \"2015\",\r
+
+      \    SUM(\r
+
+      \        CASE\r
+
+      \            WHEN \"year\" = 2016 THEN \"sale\"\r
+
+      \        END\r
+
+      \    ) AS \"2016\",\r
+
+      \    SUM(\r
+
+      \        CASE\r
+
+      \            WHEN \"year\" = 2017 THEN \"sale\"\r
+
+      \        END\r
+
+      \    ) AS \"2017\",\r
+
+      \    SUM(\r
+
+      \        CASE\r
+
+      \            WHEN \"year\" = 2018 THEN \"sale\"\r
+
+      \        END\r
+
+      \    ) AS \"2018\",\r
+
+      \    SUM(\r
+
+      \        CASE\r
+
+      \            WHEN \"year\" = 2019 THEN \"sale\"\r
+
+      \        END\r
+
+      \    ) AS \"2019\",\r
+
+      \    SUM(\r
+
+      \        CASE\r
+
+      \            WHEN \"year\" = 2020 THEN \"sale\"\r
+
+      \        END\r
+
+      \    ) AS \"2020\",\r
+
+      \    SUM(\r
+
+      \        CASE\r
+
+      \            WHEN \"year\" = 2021 THEN \"sale\"\r
+
+      \        END\r
+
+      \    ) AS \"2021\",\r
+
+      \    SUM(\r
+
+      \        CASE\r
+
+      \            WHEN \"year\" = 2022 THEN \"sale\"\r
+
+      \        END\r
+
+      \    ) AS \"2022\",\r
+
+      \    SUM(\r
+
+      \        CASE\r
+
+      \            WHEN \"year\" = 2023 THEN \"sale\"\r
+
+      \        END\r
+
+      \    ) AS \"2023\",\r
+
+      \    SUM(\r
+
+      \        CASE\r
+
+      \            WHEN \"year\" = 2024 THEN \"sale\"\r
+
+      \        END\r
+
+      \    ) AS \"2024\"\r
+
+      FROM\r
+
+      \    revenue_by_month\r
+
+      GROUP BY\r
+
+      \    \"month_name\",\r
+
+      \    \"month_no\"\r
+
+      ORDER BY\r
+
+      \    \"month_no\""
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Which Month generate the Highest sale\r
+
+      \r
+
+      SELECT\r
+
+      \    TO_CHAR(orderdate, 'Mon') AS \"month_name\",\r
+
+      \    EXTRACT(\r
+
+      \        MONTH\r
+
+      \        FROM\r
+
+      \            orderdate\r
+
+      \    ) AS \"month_no\",\r
+
+      \    SUM(ROUND((quantity * netprice)::NUMERIC, 2)) AS \"sale\"\r
+
+      FROM\r
+
+      \    sales\r
+
+      GROUP BY\r
+
+      \    \"month_no\",\r
+
+      \    \"month_name\"\r
+
+      ORDER BY\r
+
+      \    \"month_no\""
+    metadata: {}
+  - kind: 1
+    languageId: markdown
+    value: "### Windows Functions"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- Who are our the top customers by total sale in each region (RANK)\r
+
+      WITH\r
+
+      \    customer_revenue AS (\r
+
+      \        SELECT\r
+
+      \            c.country,\r
+
+      \            s.customerkey,\r
+
+      \            c.givenname,\r
+
+      \            SUM(ROUND((quantity * netprice)::NUMERIC, 2)) AS
+      \"revenue\"\r
+
+      \        FROM\r
+
+      \            sales s\r
+
+      \            LEFT JOIN customer c ON (s.customerkey = c.customerkey)\r
+
+      \        GROUP BY\r
+
+      \            c.country,\r
+
+      \            c.givenname,\r
+
+      \            s.customerkey\r
+
+      \        ORDER BY\r
+
+      \            \"revenue\" DESC\r
+
+      \    ),\r
+
+      \    customer_rank AS (\r
+
+      \        SELECT\r
+
+      \            *,\r
+
+      \            RANK() OVER (\r
+
+      \                PARTITION BY\r
+
+      \                    country\r
+
+      \                ORDER BY\r
+
+      \                    \"revenue\" DESC\r
+
+      \            ) AS \"rank\"\r
+
+      \        FROM\r
+
+      \            customer_revenue\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    *\r
+
+      FROM\r
+
+      \    customer_rank\r
+
+      WHERE \"rank\" = 1"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- How are sales cummulating over time\r
+
+      WITH\r
+
+      \    yearly_revenue AS (\r
+
+      \        SELECT\r
+
+      \            EXTRACT(\r
+
+      \                YEAR\r
+
+      \                FROM\r
+
+      \                    orderdate\r
+
+      \            )::TEXT AS \"year\",\r
+
+      \            SUM(ROUND((quantity * netprice)::NUMERIC, 2)) AS
+      \"revenue\"\r
+
+      \        FROM\r
+
+      \            sales\r
+
+      \        GROUP BY\r
+
+      \            \"year\"\r
+
+      \        ORDER BY\r
+
+      \            \"year\"\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    *,\r
+
+      \    SUM(\"revenue\") OVER(ORDER BY \"year\") AS \"cumsum\"\r
+
+      FROM\r
+
+      \    yearly_revenue\r
+
+      ORDER BY\r
+
+      \    \"year\""
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- How is average order value changing over time (3 months moving
+      average)\r
+
+      WITH\r
+
+      \    monthly_revenue AS (\r
+
+      \        SELECT\r
+
+      \            DATE_TRUNC('month', orderdate)::DATE AS \"month\",\r
+
+      \            SUM(ROUND((quantity * netprice)::NUMERIC, 2)) AS
+      \"revenue\"\r
+
+      \        FROM\r
+
+      \            sales\r
+
+      \        GROUP BY\r
+
+      \            \"month\"\r
+
+      \        ORDER BY\r
+
+      \            \"month\"\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    *,\r
+
+      \    ROUND(\r
+
+      \        AVG(\"revenue\") OVER (\r
+
+      \            ORDER BY\r
+
+      \                \"month\" ROWS BETWEEN 2 PRECEDING\r
+
+      \                AND CURRENT ROW\r
+
+      \        )::NUMERIC,\r
+
+      \        2\r
+
+      \    ) AS \"3_month_MA\"\r
+
+      FROM\r
+
+      \    monthly_revenue"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- what is the (avg) time gap between each purchase of a customer\r
+
+      WITH\r
+
+      \    customer_order_interval AS (\r
+
+      \        SELECT\r
+
+      \            customerkey,\r
+
+      \            orderkey,\r
+
+      \            orderdate,\r
+
+      \            LAG(orderdate) OVER (\r
+
+      \                PARTITION BY\r
+
+      \                    customerkey\r
+
+      \                ORDER BY\r
+
+      \                    orderdate\r
+
+      \            ) AS previous_order_date\r
+
+      \        FROM\r
+
+      \            (\r
+
+      \                SELECT DISTINCT\r
+
+      \                    customerkey,\r
+
+      \                    orderkey,\r
+
+      \                    orderdate\r
+
+      \                FROM\r
+
+      \                    sales\r
+
+      \            )\r
+
+      \    ),\r
+
+      \    avg_time_between_orders AS (\r
+
+      \        SELECT\r
+
+      \            customerkey,\r
+
+      \            AVG((orderdate - previous_order_date)) AS
+      avg_days_between_orders\r
+
+      \        FROM\r
+
+      \            customer_order_interval\r
+
+      \        GROUP BY\r
+
+      \            customerkey\r
+
+      \        HAVING\r
+
+      \            AVG((orderdate - previous_order_date)) > 0\r
+
+      \        ORDER BY\r
+
+      \            avg_days_between_orders ASC,\r
+
+      \            customerkey ASC\r
+
+      \    ),\r
+
+      \    rank_gaps AS (\r
+
+      \        SELECT\r
+
+      \            customerkey,\r
+
+      \            ROUND(avg_days_between_orders::NUMERIC, 0) AS
+      avg_days_between_orders,\r
+
+      \            NTILE(4) OVER (\r
+
+      \                ORDER BY\r
+
+      \                    avg_days_between_orders\r
+
+      \            ) AS group_\r
+
+      \        FROM\r
+
+      \            avg_time_between_orders\r
+
+      \    ),\r
+
+      \    group_gaps AS (\r
+
+      \        SELECT\r
+
+      \            *,\r
+
+      \            CASE\r
+
+      \                WHEN group_ = 1 THEN 'low gap'\r
+
+      \                WHEN group_ = 2 THEN 'medium gap'\r
+
+      \                WHEN group_ = 3 THEN 'high gap'\r
+
+      \                ELSE 'very high gap'\r
+
+      \            END AS gap_between_purchase_group\r
+
+      \        FROM\r
+
+      \            rank_gaps\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    gap_between_purchase_group,\r
+
+      \    COUNT(gap_between_purchase_group) as \"_count\"\r
+
+      FROM\r
+
+      \    group_gaps\r
+
+      GROUP BY\r
+
+      \    gap_between_purchase_group\r
+
+      \    -- can be expanded into churn"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- What are the top 5 product in each category (DENSE RANK)\r
+
+      WITH\r
+
+      \    products_sale AS (\r
+
+      \        SELECT\r
+
+      \            p.categoryname,\r
+
+      \            p.productname,\r
+
+      \            SUM(ROUND((s.quantity * s.netprice)::NUMERIC, 2)) AS sale\r
+
+      \        FROM\r
+
+      \            sales s\r
+
+      \            LEFT JOIN product p ON s.productkey = p.productkey\r
+
+      \        GROUP BY\r
+
+      \            p.categoryname,\r
+
+      \            p.productname\r
+
+      \        ORDER BY\r
+
+      \            sale DESC\r
+
+      \    ),\r
+
+      \    product_rank AS (\r
+
+      \        SELECT\r
+
+      \            *,\r
+
+      \            DENSE_RANK() OVER (\r
+
+      \                PARTITION BY\r
+
+      \                    categoryname\r
+
+      \                ORDER BY\r
+
+      \                    sale DESC\r
+
+      \            ) AS rank\r
+
+      \        FROM\r
+
+      \            products_sale\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    *\r
+
+      FROM\r
+
+      \    product_rank\r
+
+      WHERE\r
+
+      \    rank <= 5"
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: "-- segment customer into quartiles based on spending behaviour\r
+
+      WITH\r
+
+      \    customer_rev AS (\r
+
+      \        SELECT\r
+
+      \            customerkey,\r
+
+      \            SUM(ROUND((quantity * netprice)::NUMERIC, 2)) AS
+      \"revenue\"\r
+
+      \        FROM\r
+
+      \            sales\r
+
+      \        GROUP BY\r
+
+      \            customerkey\r
+
+      \    ),\r
+
+      \    customer_label AS (\r
+
+      \        SELECT\r
+
+      \            *,\r
+
+      \            CASE\r
+
+      \                WHEN \"quartile\" = 1 THEN 'very low spender'\r
+
+      \                WHEN \"quartile\" = 2 THEN 'low spender'\r
+
+      \                WHEN \"quartile\" = 3 THEN 'medium spender'\r
+
+      \                WHEN \"quartile\" = 4 THEN 'high spender'\r
+
+      \                ELSE 'very high spender'\r
+
+      \            END AS \"label\"\r
+
+      \        FROM\r
+
+      \            (\r
+
+      \                SELECT\r
+
+      \                    *,\r
+
+      \                    NTILE(5) OVER (\r
+
+      \                        ORDER BY\r
+
+      \                            \"revenue\" ASC\r
+
+      \                    ) AS \"quartile\"\r
+
+      \                FROM\r
+
+      \                    customer_rev\r
+
+      \            )\r
+
+      \    )\r
+
+      SELECT\r
+
+      \    \"label\",\r
+
+      \    COUNT(\"label\") AS \"count\"\r
+
+      FROM\r
+
+      \    customer_label\r
+
+      GROUP BY\r
+
+      \    \"label\""
+    metadata: {}
+  - kind: 2
+    languageId: sql
+    value: ""
+    metadata: {}
+metadata:
+  conn:
+    id: kR4iX8iUO4_ZR35EYU6R8
+    name: Databases
+  database: contoso_100k
+  schema: public
