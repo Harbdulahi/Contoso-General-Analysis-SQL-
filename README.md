@@ -7,7 +7,7 @@ This project is based on Contoso retail analysis, the aim (analysis goals) of wh
 This datasets or database file is a fictional dataset created by Microsoft, it's about a hardware retail (online) store. The purpose of the dataset's creation is to help learners practice their SQL (PostgreSQL, SQLITE, MYSQL, Power BI, etc) skills and far beyond. It consists of 1 fact (sales) table, 4 dimensions (date, customer, product, and store) table, and 1 other (exchange) table that has no relationship with any of the other tables.
 Let's dive in
 
-[Query File]
+[Query File](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/contoso_analysis.sql)
 
 ### Tools
 - VS Code
