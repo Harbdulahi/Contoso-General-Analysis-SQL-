@@ -152,7 +152,7 @@ Let's dive in
 
   > Revenue is Seasonal
 
-21. **Which Month generate the Highest sale**
+21. **Which Month generates the Highest sales?**
 
   ![sales_trend](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/SalesTrend.png)
 
@@ -160,16 +160,56 @@ Let's dive in
 | :--------- | :---------- |
 | Jan        | $19,647,340.15 |
 | Feb        | $25,656,119.25 |
-| Mar        | $13401720.10 |
-| Apr        | $7044374.50  |
-| May        | $17047743.92 |
-| Jun        | $18585158.07 |
-| Jul        | $14400505.03 |
-| Aug        | $15925243.69 |
-| Sep        | $16555169.35 |
-| Oct        | $17247648.57 |
-| Nov        | $17239553.01 |
-| Dec        | $20973291.43 |
+| Mar        | $13,401,720.10 |
+| Apr        | $7,044,374.50  |
+| May        | $17,047,743.92 |
+| Jun        | $18,585,158.07 |
+| Jul        | $14,400,505.03 |
+| Aug        | $15,925,243.69 |
+| Sep        | $16,555,169.35 |
+| Oct        | $17,247,648.57 |
+| Nov        | $17,239,553.01 |
+| Dec        | $20,973,291.43 |
+
+  > The month of **February** generates the highest revenue
+
+22. **Who are our top customers by total sales in each region (RANK)**
+
+| Country | Customerkey | Givenname | Revenue  | Rank  |
+| :------ | :---------- | :-------- | :------- | :---- |
+| AU      | 72844       | Ben       | 55026.30 | 1     |
+| CA      | 399184      | Peter     | 57051.11 | 1     |
+| DE      | 552225      | Janina    | 62044.12 | 1     |
+| FR      | 680583      | Oliver    | 45153.78 | 1     |
+| GB      | 1151535     | Dylan     | 49382.45 | 1     |
+| IT      | 724961      | Arcangela | 42053.47 | 1     |
+| NL      | 861510      | Natacha   | 34815.82 | 1     |
+| US      | 1743963     | Patricia  | 65431.97 | 1     |
+
+23. **How are sales cumulating over time**
+
+  ![cumulative sum](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/CummulativeSumOverTime.png)
+
+24. **How is average order value changing over time (3 months moving average)**
+
+ ![3 months moving avg](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/AverageOrderValueOverTime(3MonthsMovingAvg).png)
+
+25. **What is the (avg) time gap between each purchase of a customer**
+
+  ![avg time gap](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/Gaps_between_purchase.png)
+
+26. **What are the top 5 products in each category (DENSE RANK)**
+
+  [Top 5 products in each category](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/top_products_5_by_category.csv
+
+27. **Segment customers into quartiles based on spending behaviour**
+
+  ![customer segment](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/customer_spending.png)
+
+
+### Summary and Recommendations
+
+
 
 
   
