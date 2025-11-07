@@ -200,7 +200,7 @@ Let's dive in
 
 26. **What are the top 5 products in each category (DENSE RANK)**
 
-  [Top 5 products in each category](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/top_products_5_by_category.csv
+  [Top 5 products in each category](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/top_products_5_by_category.csv)
 
 27. **Segment customers into quartiles based on spending behaviour**
 
