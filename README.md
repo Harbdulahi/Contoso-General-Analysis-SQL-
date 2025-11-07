@@ -4,10 +4,10 @@ This project is based on Contoso retail analysis, the aim (analysis goals) of wh
 
 ### Datasets
 
-This datasets or database file is a fictional dataset created by Microsoft, it's about a hardware retail (online) store. The purpose of the dataset's creation is to help learners practice their SQL (PostgreSQL, SQLITE, MYSQL, Power BI, etc) skills and far beyond. It consists of 1 fact (sales) table, 4 dimensions (date, customer, product, and store) table, and 1 other (exchange) table that has no relationship with any of the other tables.
+This datasets or database file is a fictional dataset created by Microsoft, it's about a hardware retail (online) store. The purpose of creating the dataset is to help learners practice their SQL (PostgreSQL, SQLite, MySQL, Power BI, etc.) skills and extend their knowledge beyond. It consists of one fact (sales) table, four dimensions (date, customer, product, and store) tables, and one other (exchange) table that has no relationship with any of the other tables.
 Let's dive in
 
-[Query File](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/contoso_analysis.sql)
+[Queries File](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/contoso_analysis.sql)
 
 ### Tools
 - VS Code
@@ -27,7 +27,7 @@ Let's dive in
 - Product Analysis
 - Time Analysis
 
-[Query File]
+[Queries File](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/contoso_analysis.sql)
 
 ## Sale Performance Analysis
 
@@ -74,6 +74,8 @@ Let's dive in
 
   > On average our sales was growing at **23%** yearly from the previous year
 
+  [Queries File](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/contoso_analysis.sql)
+
 8. **Which category(s) contribute the most to revenue**
 
   ![sales_by_cat.](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/SalesByCategory.png)
@@ -115,6 +117,8 @@ Let's dive in
   ![top_product_by_region](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/png/TopProductByCountry.png)
 
 > The top **2** products don't really differ by region except in colour variation
+
+[Queries File](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/contoso_analysis.sql)
 
 16. Do top products differ by season (months in years)
 
@@ -173,6 +177,8 @@ Let's dive in
 
   > The month of **February** generates the highest revenue
 
+[Queries File](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/contoso_analysis.sql)
+
 22. **Who are our top customers by total sales in each region (RANK)**
 
 | Country | Customerkey | Givenname | Revenue  | Rank  |
@@ -210,6 +216,6 @@ Let's dive in
 ### Summary and Recommendations
 
 
-
+[Queries File](https://github.com/Harbdulahi/Contoso-General-Analysis-SQL-/blob/main/contoso/query/contoso_analysis.sql)
 
   
